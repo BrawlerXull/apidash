@@ -1,3 +1,5 @@
+import 'package:fuzzy/fuzzy.dart';
+
 Map<String, String> headers = {
   "Accept": "Specifies the media types that are acceptable for the response.",
   "Accept-Encoding":
@@ -92,9 +94,13 @@ Map<String, String> headers = {
 };
 
 List<String> getHeaderSuggestions(String pattern) {
-  return headers.keys
-      .where(
-        (element) => element.toLowerCase().contains(pattern.toLowerCase()),
-      )
-      .toList();
+  final keys = headers.keys.toList();
+
+  final fuse = Fuzzy(keys);
+
+  final results = fuse.search(pattern);
+
+  final suggestions = results.map((result) => result.item).toList();
+
+  return suggestions;
 }
