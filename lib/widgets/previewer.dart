@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:apidash/widgets/html_previewer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
@@ -33,6 +34,13 @@ class Previewer extends StatefulWidget {
 class _PreviewerState extends State<Previewer> {
   @override
   Widget build(BuildContext context) {
+    if (widget.type == kTypeText && widget.subtype == kSubTypeHtml) {
+      try {
+        return HtmlPreviewer(htmlData: widget.body);
+      } catch (e) {
+        return const ErrorMessage(message: kHtmlError);
+      }
+    }
     if (widget.type == kTypeApplication && widget.subtype == kSubTypeJson) {
       try {
         var preview = JsonPreviewer(
